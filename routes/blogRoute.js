@@ -9,7 +9,6 @@ const router = new express.Router();
 router.get('/blogs/getBlogs', async (req,res)=> {
     const blogs = await Blog.find();
     res.json(blogs)
-  
 })
 
 router.post('/blogs/postBlog', (req,res)=> {
@@ -37,9 +36,13 @@ router.put('/blogs/updateBlog', (req,res)=>{
     }
 })
 
-router.post('/blogs/deleteBlog/:id', (req,res)=> {
+router.post('/blogs/deleteBlog', async (req,res)=> {
     try {
-        res.send(req.params.id)
+        const deleteID = req.body.id
+        const deleteBlog = await Blog.findById(deleteID)
+        deleteBlog.delete()
+
+        res.send("Blog Deleted")
     }
     catch {
         res.send("some error")
